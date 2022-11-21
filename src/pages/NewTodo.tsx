@@ -10,7 +10,7 @@ const NewTodo = () => {
   const { inputData, setInputData } = useInput({
     title: '',
     description: '',
-    completion: new Date(),
+    completion: null,
   })
   const [files, setFiles] = useState<any>([])
 
@@ -34,7 +34,7 @@ const NewTodo = () => {
   return (
     <>
       <Form
-        text="Create"
+        text="Создать"
         inputData={inputData}
         onInput={onInput}
         onFile={onFile}

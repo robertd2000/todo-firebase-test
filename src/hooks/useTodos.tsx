@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { projectFirestore } from '../firebase'
+import { checkDate } from '../utils/date'
 import { ITodo, ITodoItem } from '../utils/types'
 import { useUpdate } from './useUpdate'
 
@@ -24,45 +25,21 @@ export const useTodos = () => {
       const state: any[] = []
 
       todo.forEach((d) => {
-        state.push(d.data())
+        state.push({ ...(d.data() as ITodoItem), id: d.id })
       })
 
       setTodos(state)
     })
-    const f = async () => {
-      await getTodos()
-    }
+
     checkOutdatedTodos()
-    f()
+
     return () => unsub()
   }, [loading, setTodos])
 
-  const getTodos = async () => {
-    const todosRef = collection(projectFirestore, 'todos')
-    const state: ITodoItem[] = []
-
-    try {
-      const querySnapshot = await getDocs(todosRef)
-
-      querySnapshot.forEach((todo) => {
-        state.push({ ...(todo.data() as ITodo), id: todo.id })
-      })
-    } catch (error) {
-      console.log(error)
-    }
-
-    setTodos(state)
-    return state
-  }
-
   const checkOutdatedTodos = () => {
-    const currentDate = new Date()
-
     try {
       todos.forEach((todo) => {
-        console.log(new Date(todo.completion) < currentDate)
-
-        if (new Date(todo.completion) < currentDate) {
+        if (!checkDate(todo.completion)) {
           updateTodo(todo.id, {
             ...todo,
             status: 'outdated',
@@ -88,11 +65,14 @@ export const useTodos = () => {
   }
 
   const deleteTodo = async (id: string) => {
-    const todoRef = doc(projectFirestore, 'todos', id)
+    try {
+      const todoRef = doc(projectFirestore, 'todos', id)
 
-    await deleteDoc(todoRef)
-    await getTodos()
+      await deleteDoc(todoRef)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  return { todos, createTodo, deleteTodo }
+  return { todos, loading, createTodo, deleteTodo }
 }

@@ -77,6 +77,19 @@ a {
   align-items: center;
   margin: 20px 0;
   min-width: 400px;
+  border-radius: 10px;
+}
+
+.todo__item.outdated {
+  background-color: #ffc9c9;
+}
+
+.todo__item.done {
+  background-color: #c4ffc0;
+}
+
+.todo__item:hover {
+  background-color: #a4d5ff;
 }
 
 .todo__item a {
@@ -121,6 +134,10 @@ a {
   border-bottom: 2px solid #888;
 }
 
+.controls {
+  display: flex;
+}
+
 .btn {
   border: none;
   outline: none;
@@ -129,11 +146,21 @@ a {
   left: 0;
   font-size: 1.1em;
   width: 7em;
-  background-color: #54b8ff;
+  background-color: #269df1;
   color: white;
   padding: 0.8em 0;
   margin-top: 2em;
   border-radius: 0.3em;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.btn.delete {
+  background-color: red;
+}
+.btn:disabled,
+.btn[disabled] {
+  background-color: #5ea7db;
 }
 
 .img {
@@ -152,4 +179,18 @@ a {
   font-size: 30px;
   font-weight: bold;
   color: red;
+}
+
+.invalid {
+  border: 2px solid red;
+  color: red;
+}
+
+.input.invalid {
+  border-bottom: 2px solid red !important;
+  color: red;
+}
+
+.datepicker {
+  margin: 20px 20px 0 0;
 }

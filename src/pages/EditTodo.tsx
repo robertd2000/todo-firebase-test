@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import FilesItem from '../components/FilesItem'
 import Form from '../components/Form'
 import { useFiles } from '../hooks/useFiles'
 import { useInput } from '../hooks/useInput'
@@ -15,7 +16,7 @@ const EditTodo = () => {
   const { inputData, onInput, setInputData } = useInput({
     title: todo?.title || '',
     description: todo?.description || '',
-    completion: new Date(),
+    completion: todo?.completion ? new Date(todo?.completion!) : null,
   })
   const [filesState, setFiles] = useState<any>([])
 
@@ -23,7 +24,7 @@ const EditTodo = () => {
     setInputData({
       title: todo?.title || '',
       description: todo?.description || '',
-      completion: todo?.completion ? new Date(todo?.completion!) : new Date(),
+      completion: null,
     })
   }, [todo])
 
@@ -47,21 +48,7 @@ const EditTodo = () => {
         onSubmit={update}
       />
 
-      {files && (
-        <div className="">
-          {files
-            .filter((i) => !i.name.includes('item'))
-            .map((file) => (
-              <img
-                className="img"
-                key={file.name + Math.random() * 1000}
-                src={file.url}
-                alt=""
-                onClick={() => deleteFile(file.name)}
-              />
-            ))}
-        </div>
-      )}
+      {files && <FilesItem files={files} deleteFile={deleteFile} />}
     </div>
   )
 }

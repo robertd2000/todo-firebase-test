@@ -15,8 +15,15 @@ const TodoItem: FC<{ todo: ITodoItem }> = ({ todo }) => {
     setCheck(!check)
   }
 
+  const todoItemStatus =
+    todo.status === 'outdated'
+      ? 'outdated'
+      : todo.status === 'done'
+      ? 'done'
+      : ''
+
   return (
-    <div className="todo__item" key={todo.id}>
+    <div className={`todo__item ${todoItemStatus}`} key={todo.id}>
       <input
         className="check__box"
         type="checkbox"
